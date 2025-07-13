@@ -1,3 +1,4 @@
+import { FaUpload } from "react-icons/fa";
 import React, { useState } from "react";
 import "../styles/RaiseInvoice.css";
 import NavigationIcons from "./NavigationIcons";

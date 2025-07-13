@@ -8,13 +8,16 @@ const RaiseInvoice = () => {
   const [amount, setAmount] = useState("");
   const [pdfs, setPdfs] = useState([]);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setError("");
 
     if (!department || !item || !amount || pdfs.length === 0) {
-      return setMessage("All fields are required.");
+      setError("⚠️ All fields and at least one PDF are required.");
+      return;
     }
 
     const formData = new FormData();
@@ -32,33 +35,34 @@ const RaiseInvoice = () => {
       });
 
       const data = await res.json();
+
       if (res.ok) {
         setMessage(`✅ Invoice submitted! Ref Code: ${data.referenceCode}`);
         setItem("");
         setAmount("");
         setPdfs([]);
       } else {
-        setMessage(data.error || "❌ Submission failed.");
+        setError(data.error || "❌ Upload failed.");
       }
     } catch (err) {
-      console.error("❌ Submission error:", err);
-      setMessage("Server error");
+      console.error("❌ Upload error:", err);
+      setError("❌ Server error during upload.");
     }
   };
 
   return (
     <div className="login-container">
       <NavigationIcons />
-      <img src="/logo.png" alt="Company Logo" className="logo-top-left" />
-      <img src="/tata-logo.png" alt="Company Logo" className="logo-top-right" />
+      <img src="/logo.png" alt="Logo" className="logo-top-left" />
+      <img src="/tata-logo.png" alt="TATA Logo" className="logo-top-right" />
       <div className="login-box">
         <h2>Raise Invoice</h2>
         <form onSubmit={handleSubmit}>
           <select
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
-            required
             className="custom-select"
+            required
           >
             <option value="HR">HR</option>
             <option value="F&A">F&A</option>
@@ -69,22 +73,25 @@ const RaiseInvoice = () => {
             <option value="SHE">SHE</option>
             <option value="CS">CS</option>
           </select>
+
           <input
-            className="item"
             type="text"
+            className="item"
             placeholder="Item"
             value={item}
             onChange={(e) => setItem(e.target.value)}
             required
           />
+
           <input
-            className="amount"
             type="number"
+            className="amount"
             placeholder="Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             required
           />
+
           <input
             type="file"
             multiple
@@ -92,8 +99,11 @@ const RaiseInvoice = () => {
             onChange={(e) => setPdfs([...e.target.files])}
             required
           />
+
           <button type="submit">Submit</button>
-          {message && <p className="error-msg">{message}</p>}
+
+          {message && <p className="success-msg">{message}</p>}
+          {error && <p className="error-msg">{error}</p>}
         </form>
       </div>
     </div>

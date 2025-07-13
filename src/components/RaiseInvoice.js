@@ -53,6 +53,7 @@ const RaiseInvoice = () => {
 
   return (
     <div className="login-container">
+      <span><FaUpload /> Upload Files</span>   
       <NavigationIcons />
       <img src="/logo.png" alt="Logo" className="logo-top-left" />
       <img src="/tata-logo.png" alt="TATA Logo" className="logo-top-right" />
@@ -108,6 +109,7 @@ const RaiseInvoice = () => {
         </form>
       </div>
     </div>
+    
   );
 };
 
